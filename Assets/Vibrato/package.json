@@ -1,0 +1,12 @@
+{
+  "name": "com.cintam.vibrato",
+  "displayName": "Vibrato",
+  "author": { "name": "Drogan Cintam", "url": "https://github.com/DroganCintam" },
+  "version": "1.0.0",
+  "unity": "2022.3",
+  "description": "A set of utility and base classes for game development.",
+  "keywords": [ "utility", "ui", "profile" ],
+  "license": "MIT",
+  "category": "Utility",
+  "dependencies": {}
+}
