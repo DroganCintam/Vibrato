@@ -9,34 +9,34 @@ namespace Vibrato.Utils
         where TData : class, new()
     {
         [field: SerializeField]
-        public string filename { get; protected set; } = "p.dat";
+        public string Filename { get; protected set; } = "p.dat";
 
         [field: SerializeField]
-        public TData data { get; protected set; }
+        public TData Data { get; protected set; }
 
-        private string cachedPath;
+        private string _cachedPath;
 
         public TData Load()
         {
-            cachedPath = Path.Combine(PersistentPath.Get(), filename);
-            if (!File.Exists(cachedPath))
+            _cachedPath = Path.Combine(PersistentPath.Get(), Filename);
+            if (!File.Exists(_cachedPath))
             {
-                Debug.Log($"{filename} does not exist, creating new");
-                data = new TData();
+                Debug.Log($"{Filename} does not exist, creating new");
+                Data = new TData();
                 
-                string directory = Path.GetDirectoryName(cachedPath);
+                string directory = Path.GetDirectoryName(_cachedPath);
                 if (directory != null && !Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
                 }
                 
-                return data;
+                return Data;
             }
 
             try
             {
-                var json = File.ReadAllText(cachedPath);
-                data = JsonConvert.DeserializeObject<TData>(json, new JsonSerializerSettings
+                var json = File.ReadAllText(_cachedPath);
+                Data = JsonConvert.DeserializeObject<TData>(json, new JsonSerializerSettings
                 {
                     ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
                     ObjectCreationHandling = ObjectCreationHandling.Replace,
@@ -44,25 +44,25 @@ namespace Vibrato.Utils
             }
             catch (Exception e)
             {
-                Debug.LogError($"Cannot load {filename}: {e.Message}");
+                Debug.LogError($"Cannot load {Filename}: {e.Message}");
                 Debug.LogError(e.StackTrace);
 
-                data = new TData();
+                Data = new TData();
             }
 
-            return data;
+            return Data;
         }
 
         public void Save()
         {
             try
             {
-                var json = JsonConvert.SerializeObject(data);
-                File.WriteAllText(cachedPath, json);
+                var json = JsonConvert.SerializeObject(Data);
+                File.WriteAllText(_cachedPath, json);
             }
             catch (Exception e)
             {
-                Debug.LogError($"Cannot save {filename}: {e.Message}");
+                Debug.LogError($"Cannot save {Filename}: {e.Message}");
                 Debug.LogError(e.StackTrace);
             }
         }

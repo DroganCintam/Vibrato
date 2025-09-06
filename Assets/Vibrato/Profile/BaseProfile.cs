@@ -13,10 +13,10 @@ namespace Vibrato.Profile
     {
         [JsonProperty("created_at")]
         [SerializeField]
-        protected int createdAt;
+        protected int _createdAt;
         
         [JsonIgnore]
-        public int CreatedAt => createdAt;
+        public int CreatedAt => _createdAt;
         
         [JsonIgnore]
         public IProfileSaver Saver { get; private set; }
@@ -34,9 +34,9 @@ namespace Vibrato.Profile
 
             InitializeSections();
 
-            if (createdAt == 0)
+            if (_createdAt == 0)
             {
-                createdAt = GetCurrentTime();
+                _createdAt = GetCurrentTime();
                 InitializeAtCreation();
             }
         }

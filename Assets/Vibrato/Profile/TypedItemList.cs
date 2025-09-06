@@ -10,36 +10,36 @@ namespace Vibrato.Profile
     public class TypedItemList<TItem, TItemType>
         where TItem : IHasType<TItemType>, IHasId
     {
-        [JsonProperty("items")]
+        [JsonProperty("list")]
         [SerializeField]
-        protected List<TItem> list = new();
+        protected List<TItem> _list = new();
 
         [JsonIgnore]
-        protected Dictionary<string, TItem> itemById;
+        protected Dictionary<string, TItem> _itemById;
         
         [JsonIgnore]
-        protected Dictionary<TItemType, TItem> singleItemByType;
+        protected Dictionary<TItemType, TItem> _singleItemByType;
         
         [JsonIgnore]
-        protected Dictionary<TItemType, List<TItem>> multipleItemByType;
+        protected Dictionary<TItemType, List<TItem>> _multipleItemByType;
 
         protected void EnsureMapping()
         {
-            if (itemById != null) return;
+            if (_itemById != null) return;
 
-            itemById = new Dictionary<string, TItem>();
-            singleItemByType = new Dictionary<TItemType, TItem>();
-            multipleItemByType = new Dictionary<TItemType, List<TItem>>();
+            _itemById = new Dictionary<string, TItem>();
+            _singleItemByType = new Dictionary<TItemType, TItem>();
+            _multipleItemByType = new Dictionary<TItemType, List<TItem>>();
             
-            for (int i = 0; i < list.Count; ++i)
+            for (int i = 0; i < _list.Count; ++i)
             {
-                var item = list[i];
-                itemById.Add(item.id, item);
-                singleItemByType[item.type] = item;
-                if (!multipleItemByType.TryGetValue(item.type, out var typedList))
+                var item = _list[i];
+                _itemById.Add(item.Id, item);
+                _singleItemByType[item.Type] = item;
+                if (!_multipleItemByType.TryGetValue(item.Type, out var typedList))
                 {
                     typedList = new List<TItem>();
-                    multipleItemByType.Add(item.type, typedList);
+                    _multipleItemByType.Add(item.Type, typedList);
                 }
                 typedList.Add(item);
             }
@@ -47,31 +47,31 @@ namespace Vibrato.Profile
 
         public List<TItem> GetAll()
         {
-            return list;
+            return _list;
         }
 
         public TItem TryGetById(string id)
         {
             EnsureMapping();
             
-            return itemById.GetValueOrDefault(id);
+            return _itemById.GetValueOrDefault(id);
         }
 
         public TItem GetSingleByType(TItemType type)
         {
             EnsureMapping();
             
-            return singleItemByType.GetValueOrDefault(type);
+            return _singleItemByType.GetValueOrDefault(type);
         }
 
         public List<TItem> GetMultipleByType(TItemType type)
         {
             EnsureMapping();
             
-            if (!multipleItemByType.TryGetValue(type, out var list))
+            if (!_multipleItemByType.TryGetValue(type, out var list))
             {
                 list = new List<TItem>();
-                multipleItemByType.Add(type, list);
+                _multipleItemByType.Add(type, list);
             }
             return list;
         }
@@ -80,15 +80,15 @@ namespace Vibrato.Profile
         {
             EnsureMapping();
             
-            if (itemById.TryGetValue(item.id, out existingItem))
+            if (_itemById.TryGetValue(item.Id, out existingItem))
             {
                 return false;
             }
 
-            list.Add(item);
-            itemById.Add(item.id, item);
-            singleItemByType.TryAdd(item.type, item);
-            GetMultipleByType(item.type).Add(item);
+            _list.Add(item);
+            _itemById.Add(item.Id, item);
+            _singleItemByType.TryAdd(item.Type, item);
+            GetMultipleByType(item.Type).Add(item);
             
             return true;
         }

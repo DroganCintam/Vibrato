@@ -7,15 +7,17 @@ namespace Vibrato.UI
         where T : MonoBehaviour
     {
         [SerializeField]
-        private Transform container;
+        private Transform _container;
 
         [SerializeField]
-        private T itemPrefab;
+        private T _itemPrefab;
 
         [SerializeField]
-        private T[] existingItems;
+        private T[] _existingItems;
 
-        public readonly List<T> items = new();
+        protected readonly List<T> _items = new();
+
+        public IList<T> Items => _items;
 
         protected void Setup()
         {
@@ -25,23 +27,23 @@ namespace Vibrato.UI
         protected T SpawnItem()
         {
             T item;
-            if (items.Count < (existingItems?.Length ?? 0))
+            if (_items.Count < (_existingItems?.Length ?? 0))
             {
-                item = existingItems[items.Count];
+                item = _existingItems[_items.Count];
                 item.gameObject.SetActive(true);
             }
             else
             {
-                item = Instantiate(itemPrefab.gameObject, container, false).GetComponent<T>();
+                item = Instantiate(_itemPrefab.gameObject, _container, false).GetComponent<T>();
             }
 
-            items.Add(item);
+            _items.Add(item);
             return item;
         }
 
         protected void RemoveItem(T item)
         {
-            if (items.Count <= (existingItems?.Length ?? 0))
+            if (_items.Count <= (_existingItems?.Length ?? 0))
             {
                 item.gameObject.SetActive(false);
             }
@@ -50,14 +52,14 @@ namespace Vibrato.UI
                 Destroy(item.gameObject);
             }
 
-            items.Remove(item);
+            _items.Remove(item);
         }
 
         public void Clear()
         {
-            for (int i = 0; i < items.Count; ++i)
+            for (int i = 0; i < _items.Count; ++i)
             {
-                RemoveItem(items[i]);
+                RemoveItem(_items[i]);
             }
         }
     }

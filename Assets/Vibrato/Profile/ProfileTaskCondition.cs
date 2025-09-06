@@ -4,49 +4,44 @@ namespace Vibrato.Profile
 {
     public abstract class ProfileTaskCondition
     {
-        public abstract bool satisfied { get; }
+        public abstract bool Satisfied { get; }
     }
 
     public sealed class ObjectExistsCondition<T> : ProfileTaskCondition
         where T : class
     {
-        public readonly T obj;
+        public readonly T Object;
 
         public ObjectExistsCondition(T obj)
         {
-            this.obj = obj;
+            Object = obj;
         }
 
-        public override bool satisfied => obj != null;
+        public override bool Satisfied => Object != null;
     }
 
     public static class ProfileTaskConditionExtensions
     {
         public static bool AddCondition<TProfile, TSection, TCondition>(
-                this ProfileSection<TProfile>.ProfileTask<TSection> task, TCondition condition)
+                this ProfileTask<TProfile, TSection> task, TCondition condition)
             where TProfile : BaseProfile<TProfile>
             where TSection : ProfileSection<TProfile>
             where TCondition : ProfileTaskCondition
         {
-            task.conditions.Add(condition);
-            return condition.satisfied;
+            task.Conditions.Add(condition);
+            return condition.Satisfied;
         }
 
-        public static bool CanProceed<TProfile, TSection>(
-                this ProfileSection<TProfile>.ProfileTask<TSection> task)
-            where TProfile : BaseProfile<TProfile>
-            where TSection : ProfileSection<TProfile>
+        public static bool CanProceed(this ProfileTask task)
         {
-            return task.conditions.All(condition => condition.satisfied);
+            return task.Conditions.All(condition => condition.Satisfied);
         }
 
-        public static TCondition GetCondition<TProfile, TSection, TCondition>(
-                this ProfileSection<TProfile>.ProfileTask<TSection> task)
-            where TProfile : BaseProfile<TProfile>
-            where TSection : ProfileSection<TProfile>
+        public static TCondition GetCondition<TCondition>(
+                this ProfileTask task)
             where TCondition : ProfileTaskCondition
         {
-            return task.conditions.OfType<TCondition>().FirstOrDefault();
+            return task.Conditions.OfType<TCondition>().FirstOrDefault();
         }
     }
 }

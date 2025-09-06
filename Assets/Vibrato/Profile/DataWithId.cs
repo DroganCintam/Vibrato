@@ -8,11 +8,11 @@ namespace Vibrato.Profile
     {
         [JsonProperty("id")]
         [field: SerializeField]
-        public string id { get; protected set; }
+        public string Id { get; protected set; }
 
         protected DataWithId(string id)
         {
-            this.id = id;
+            Id = id;
         }
     }
 }

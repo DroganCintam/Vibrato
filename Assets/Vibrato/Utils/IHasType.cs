@@ -2,6 +2,6 @@ namespace Vibrato.Utils
 {
     public interface IHasType<out TType>
     {
-        TType type { get; }
+        TType Type { get; }
     }
 }

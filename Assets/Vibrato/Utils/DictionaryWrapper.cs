@@ -4,19 +4,19 @@ namespace Vibrato.Utils
 {
     public class DictionaryWrapper<T>
     {
-        protected readonly List<Pair<string, T>> data;
-        protected readonly Dictionary<string, T> dict;
+        protected readonly List<Pair<string, T>> Data;
+        protected readonly Dictionary<string, T> Dict;
 
         public DictionaryWrapper(List<Pair<string, T>> data)
         {
-            this.data = data;
-            dict = data.ToDictionary();
+            Data = data;
+            Dict = data.ToDictionary();
         }
 
         public T TryGet(string key)
         {
             if (key == null) return default;
-            dict.TryGetValue(key, out var item);
+            Dict.TryGetValue(key, out var item);
             return item;
         }
     }

@@ -14,7 +14,7 @@ namespace Vibrato.Profile
         where TProfile : BaseProfile<TProfile>
     {
         [JsonIgnore]
-        protected TProfile profile => DataSingleton<TProfile>.instance;
+        public TProfile Profile => DataSingleton<TProfile>.Instance;
 
         /// <summary>
         /// Initializes the section.

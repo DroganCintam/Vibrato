@@ -6,15 +6,15 @@ namespace Vibrato.UI
     public sealed class SafeAreaRect : MonoBehaviour
     {
         [SerializeField]
-        private Canvas canvas;
+        private Canvas _canvas;
         
-        private RectTransform rectTransform;
-        private Vector2 defaultSize;
+        private RectTransform _rectTransform;
+        private Vector2 _defaultSize;
         
         private void Start()
         {
-            rectTransform = GetComponent<RectTransform>();
-            defaultSize = rectTransform.rect.size;
+            _rectTransform = GetComponent<RectTransform>();
+            _defaultSize = _rectTransform.rect.size;
             
 #if !UNITY_EDITOR
             UpdateRect();
@@ -22,13 +22,13 @@ namespace Vibrato.UI
         }
         
 #if UNITY_EDITOR
-        private Vector2 screenSize;
+        private Vector2 _screenSize;
         private void LateUpdate()
         {
-            if (!Mathf.Approximately(Screen.width, screenSize.x)
-                || !Mathf.Approximately(Screen.height, screenSize.y))
+            if (!Mathf.Approximately(Screen.width, _screenSize.x)
+                || !Mathf.Approximately(Screen.height, _screenSize.y))
             {
-                screenSize = new Vector2(Screen.width, Screen.height);
+                _screenSize = new Vector2(Screen.width, Screen.height);
                 ResetAndUpdate().Forget();
             }
 
@@ -36,11 +36,11 @@ namespace Vibrato.UI
 
             async UniTask ResetAndUpdate()
             {
-                rectTransform.sizeDelta = Vector2.zero;
-                rectTransform.anchoredPosition = Vector2.zero;
+                _rectTransform.sizeDelta = Vector2.zero;
+                _rectTransform.anchoredPosition = Vector2.zero;
                 
                 await UniTask.NextFrame();
-                defaultSize = rectTransform.rect.size;
+                _defaultSize = _rectTransform.rect.size;
                 
                 UpdateRect();
             }
@@ -51,11 +51,11 @@ namespace Vibrato.UI
         {
             var safeArea = Screen.safeArea;
 
-            float screenToLocal = defaultSize.x / Screen.width;
+            float screenToLocal = _defaultSize.x / Screen.width;
             float safeTopInLocal = safeArea.yMax * screenToLocal;
-            float heightDifference = defaultSize.y - safeTopInLocal;
-            rectTransform.sizeDelta = new Vector2(0, -heightDifference);
-            rectTransform.anchoredPosition = new Vector2(0, -heightDifference / 2);
+            float heightDifference = _defaultSize.y - safeTopInLocal;
+            _rectTransform.sizeDelta = new Vector2(0, -heightDifference);
+            _rectTransform.anchoredPosition = new Vector2(0, -heightDifference / 2);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Vibrato.Utils;
 
-namespace Vibrato.Utils
+namespace Vibrato.Profile
 {
     public class ProfileDictionaryWrapper<T> : DictionaryWrapper<T>
     {
@@ -11,29 +12,29 @@ namespace Vibrato.Utils
 
         public void Add(string key, T item)
         {
-            data.Add(new Pair<string, T>(key, item));
-            dict.Add(key, item);
+            Data.Add(new Pair<string, T>(key, item));
+            Dict.Add(key, item);
         }
 
         public void Remove(string key)
         {
-            if (dict.TryGetValue(key, out var item))
+            if (Dict.TryGetValue(key, out var item))
             {
-                data.Remove(new Pair<string, T>(key, item));
-                dict.Remove(key);
+                Data.Remove(new Pair<string, T>(key, item));
+                Dict.Remove(key);
             }
         }
 
         public void Update(string key, T item)
         {
-            if (dict.ContainsKey(key))
+            if (Dict.ContainsKey(key))
             {
-                dict[key] = item;
-                for (int i = 0; i < data.Count; i++)
+                Dict[key] = item;
+                for (int i = 0; i < Data.Count; i++)
                 {
-                    if (data[i].Key == key)
+                    if (Data[i].Key == key)
                     {
-                        data[i].Value = item;
+                        Data[i].Value = item;
                         break;
                     }
                 }

@@ -9,21 +9,21 @@ namespace Vibrato.UI
     public class TapToClose : MonoBehaviour, IPointerDownHandler
     {
         [SerializeField]
-        private float delay;
+        private float _delay;
 
-        private float timeAtAwake;
+        private float _timeAtAwake;
         
         public static Action CloseMethod { get; set; }
 
         private void Awake()
         {
-            timeAtAwake = Time.realtimeSinceStartup;
+            _timeAtAwake = Time.realtimeSinceStartup;
         }
 
         void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
         {
-            if (delay > 0 && Time.realtimeSinceStartup - timeAtAwake <= delay) return;
-            timeAtAwake = Time.realtimeSinceStartup;
+            if (_delay > 0 && Time.realtimeSinceStartup - _timeAtAwake <= _delay) return;
+            _timeAtAwake = Time.realtimeSinceStartup;
 
             CloseMethod?.Invoke();
         }

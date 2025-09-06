@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Vibrato.Utils;
 
-namespace Vibrato.Utils
+namespace Vibrato.Profile
 {
     public class ProfileListWrapper<T> : ListWrapper<T>
         where T : IHasId
@@ -12,23 +13,23 @@ namespace Vibrato.Utils
 
         public void Add(T item)
         {
-            data.Add(item);
-            dict.Add(item.id, item);
+            Data.Add(item);
+            Dict.Add(item.Id, item);
         }
 
         public void Remove(string id)
         {
-            if (dict.TryGetValue(id, out var item))
+            if (Dict.TryGetValue(id, out var item))
             {
-                data.Remove(item);
-                dict.Remove(id);
+                Data.Remove(item);
+                Dict.Remove(id);
             }
         }
 
         public void Clear()
         {
-            data.Clear();
-            dict.Clear();
+            Data.Clear();
+            Dict.Clear();
         }
     }
 }

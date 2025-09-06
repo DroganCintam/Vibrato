@@ -5,42 +5,42 @@ namespace Vibrato.Utils
 {
     public class ListWrapper<T> where T : IHasId
     {
-        protected readonly List<T> data;
-        protected readonly Dictionary<string, T> dict;
+        protected readonly List<T> Data;
+        protected readonly Dictionary<string, T> Dict;
 
         public ListWrapper(List<T> data)
         {
-            this.data = data;
-            dict = new Dictionary<string, T>();
+            Data = data;
+            Dict = new Dictionary<string, T>();
             foreach (var item in data)
             {
-                dict[item.id] = item;
+                Dict[item.Id] = item;
             }
         }
 
-        public int Count => data.Count;
+        public int Count => Data.Count;
 
         public bool Contains(string id)
         {
-            return dict.ContainsKey(id);
+            return Dict.ContainsKey(id);
         }
 
         public T TryGet(string id)
         {
             if (id == null) return default;
-            dict.TryGetValue(id, out T item);
+            Dict.TryGetValue(id, out T item);
             return item;
         }
 
         public IList<T> GetAll()
         {
-            return data;
+            return Data;
         }
 
         public IList<T> GetAllPredicate(Predicate<T> predicate)
         {
             var result = new List<T>();
-            foreach (var item in data)
+            foreach (var item in Data)
             {
                 if (predicate(item))
                 {
@@ -59,7 +59,7 @@ namespace Vibrato.Utils
             var dict = new Dictionary<string, T>();
             foreach (var item in list)
             {
-                dict[item.id] = item;
+                dict[item.Id] = item;
             }
             return dict;
         }
